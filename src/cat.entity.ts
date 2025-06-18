@@ -41,7 +41,10 @@ export class CatEntity {
     static getInstance(): CatEntity {
         if (!this.isInstance()) {
             throw new Error("Кота еще на завели.");
+        } else if (this.instance.status === CatStatus.dead) {
+            throw new Error('К сожалению, кот умер')
         }
+
         return this.instance;
     }
 
