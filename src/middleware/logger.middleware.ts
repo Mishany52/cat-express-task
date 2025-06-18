@@ -12,8 +12,7 @@ export function loggerMiddleware(req: RequestWithTimestamp, res: Response, next:
         const status = res.statusCode;
         const method = req.method;
         const url = req.originalUrl;
-        const platform = req.headers["sec-ch-ua-platform"]
-        console.log(`[${new Date().toISOString()}] ${method} ${url} - status:${status} duration:(${duration}ms) platform:${platform}`);
+        console.log(`[${new Date().toISOString()}] ${method} ${url} - status:${status} duration:(${duration}ms)`);
     });
 
     next();

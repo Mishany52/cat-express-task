@@ -10,7 +10,6 @@ export const swaggerSpec = swaggerJSDoc({
             contact: {
                 email: 'kalintsev309206@gmail.com'
             },
-            host: 'localhost:3000'
         }
     },
     apis: ['./src/pet-router.ts', './src/dto/*.ts']

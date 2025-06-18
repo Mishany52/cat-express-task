@@ -46,15 +46,14 @@ export class CatEntity {
     }
 
     private updateStatus(): CatStatus {
-        if (this.health > 30 && this.status != CatStatus.alive) {
-            this.status = CatStatus.alive;
-        } else if (this.health <= 30 && this.health > 0 && this.status != CatStatus.sick) {
+        if (this.health <= 0 || this.hungry >= 100) {
+            this.status = CatStatus.dead;
+        } else if (this.health <= 30 && this.health > 0) {
             this.status = CatStatus.sick;
-        } else if (this.health <= 0 || this.hungry >= 100 && this.status != CatStatus.dead) {
-            this.status = CatStatus.dead
+        } else {
+            this.status = CatStatus.alive;
         }
-
-        return this.status
+        return this.status;
     }
 
     private updateStatusAndHandleDeath(): void {
@@ -66,11 +65,17 @@ export class CatEntity {
         }
     }
 
+    private calculateMood(): number {
+        return (this.health + (100 - this.hungry)) / 2;
+    }
+
     private refreshVitalProperties(): void {
-        this.hungry > 70 ? this.health -= 5 : this.health -= 2;
         this.age += 1;
-        this.hungry += 3;
-        this.mood = (this.health + (100 - this.hungry)) / 2;
+
+        const healthDecrease = this.hungry > 70 ? 5 : 2;
+        this.health = Math.max(0, this.health - healthDecrease)
+        this.hungry = Math.min(100, this.hungry + 3);
+        this.mood = this.calculateMood();
         this.updateStatusAndHandleDeath();
     }
 
@@ -84,8 +89,9 @@ export class CatEntity {
         if (this.status === CatStatus.dead) {
             throw new Error('К сожалению, кот умер')
         }
-        this.hungry - 30 > 0 ? this.hungry -= 30 : this.hungry = 0;
-        this.mood + 10 < 100 ? this.mood += 10 : this.mood = 100;
+
+        this.hungry = Math.max(0, this.hungry - 30);
+        this.mood = Math.max(100, this.mood + 10);
         this.updateStatusAndHandleDeath();
     }
 
@@ -93,8 +99,10 @@ export class CatEntity {
         if (this.status === CatStatus.dead) {
             throw new Error('К сожалению, кот умер')
         }
-        this.health + 20 < 100 ? this.health += 20 : this.health = 100;
-        this.hungry - 10 > 0 ? this.hungry -= 10 : this.hungry = 0;
+
+        this.health = Math.min(100, this.health + 20)
+        this.hungry = Math.max(0, this.hungry - 10);
+        this.mood = this.calculateMood();
         this.updateStatusAndHandleDeath();
     }
 
@@ -102,8 +110,9 @@ export class CatEntity {
         if (this.status === CatStatus.dead) {
             throw new Error('К сожалению, кот умер')
         }
-        this.mood + 15 < 100 ? this.mood += 15 : this.mood = 100;
-        this.hungry + 5 < 100 ? this.hungry += 5 : this.hungry = 100;
+
+        this.mood = Math.min(100, this.mood + 15);
+        this.hungry = Math.min(100, this.hungry + 5);
         this.updateStatusAndHandleDeath();
     }
 
