@@ -48,7 +48,7 @@ export class CatEntity {
     private updateStatus(): CatStatus {
         if (this.health > 30 && this.status != CatStatus.alive) {
             this.status = CatStatus.alive;
-        } else if (this.health <= 30 && this.hungry > 30 && this.status != CatStatus.sick) {
+        } else if (this.health <= 30 && this.health > 0 && this.status != CatStatus.sick) {
             this.status = CatStatus.sick;
         } else if (this.health <= 0 || this.hungry >= 100 && this.status != CatStatus.dead) {
             this.status = CatStatus.dead
